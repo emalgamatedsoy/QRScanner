@@ -8,7 +8,7 @@ https://github.com/natiginfo/QRScannerCameraX
  - SDK version 30 instead of 28
  - Uses gradle 6.11
 
-I'd like to put this under the GNU license, as I think all software I produce should be free -- but I respect natiginfo's Apache license.
+I'd like to put this under the GNU license, as I think all software I produce should be free to manipulate without having to declare such -- but I respect natiginfo's Apache license.
 Please enjoy and thank natiginfo.
 
 Enjoy!
