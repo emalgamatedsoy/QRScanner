@@ -1,12 +1,14 @@
 package com.sampleqrapp.qrscanner
 
 import android.Manifest
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraX
 import androidx.camera.core.ImageAnalysis
@@ -15,6 +17,7 @@ import androidx.camera.core.Preview
 import androidx.camera.core.PreviewConfig
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -25,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var textureView: TextureView
-
+    private lateinit var qrresp: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -64,9 +67,11 @@ class MainActivity : AppCompatActivity() {
         val qrCodeAnalyzer =
             QrCodeAnalyzer { qrCodes ->
                 qrCodes.forEach {
-                    if(it.rawValue?.contains("http")!!){
+                    qrresp = it.rawValue!!.toLowerCase()
+                    textView.text = qrresp
+                    if(qrresp.contains("http")){
                         webview.visibility = View.VISIBLE
-                        webview.loadUrl(it.rawValue!!)
+                        webview.loadUrl(qrresp)
                         resetbutton.visibility = View.VISIBLE
                         resetbutton?.setOnClickListener(){
                             webview.visibility = View.INVISIBLE
@@ -74,8 +79,6 @@ class MainActivity : AppCompatActivity() {
                             resetbutton.visibility = View.INVISIBLE
                         }
                     }
-
-                    Toast.makeText(this@MainActivity, "QR Code detected: ${it.rawValue}.", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -99,10 +102,12 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (isCameraPermissionGranted()) {
                 textureView.post { startCamera() }
-            } else {
+            }
+        }
+        else {
                 Toast.makeText(this, "Camera permission is required.", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
     }
-}
+
