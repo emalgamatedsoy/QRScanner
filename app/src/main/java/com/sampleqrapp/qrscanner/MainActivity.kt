@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
@@ -68,16 +69,9 @@ class MainActivity : AppCompatActivity() {
             QrCodeAnalyzer { qrCodes ->
                 qrCodes.forEach {
                     qrresp = it.rawValue!!.toLowerCase()
-                    textView.text = qrresp
+                    qr_resolve.text = qrresp
                     if(qrresp.contains("http")){
-                        webview.visibility = View.VISIBLE
-                        webview.loadUrl(qrresp)
-                        resetbutton.visibility = View.VISIBLE
-                        resetbutton?.setOnClickListener(){
-                            webview.visibility = View.INVISIBLE
-                            webview.stopLoading()
-                            resetbutton.visibility = View.INVISIBLE
-                        }
+                        qr_resolve.movementMethod = LinkMovementMethod.getInstance()
                     }
                 }
             }
@@ -105,9 +99,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
         else {
-                Toast.makeText(this, "Camera permission is required.", Toast.LENGTH_SHORT).show()
-                finish()
-            }
+            Toast.makeText(this, "Camera permission is required.", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
-
+}
