@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             QrCodeAnalyzer { qrCodes ->
                 qrCodes.forEach {
                     qrresp = it.rawValue!!.toLowerCase()
-                    qr_resolve.text = qrresp
+                    qr_resolve.text = it.rawValue!!
                     if(qrresp.contains("http")){
                         qr_resolve.movementMethod = LinkMovementMethod.getInstance()
                     }
